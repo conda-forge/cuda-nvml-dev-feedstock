@@ -1,6 +1,6 @@
 {% set name = "cuda-nvml-dev" %}
-{% set version = "12.0.76" %}
-{% set cuda_version = "12.0" %}
+{% set version = "12.1.105" %}
+{% set cuda_version = "12.1" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
@@ -18,10 +18,10 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvml_dev/{{ platform }}/cuda_nvml_dev-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: 6780e554784bef73050144afe39668e26923d2533c268460c348e0e380d5d048  # [linux64]
-  sha256: 319b96999d144192094d254f0607debb14118ce206ef7dfeba3d13da1cc805ec  # [ppc64le]
-  sha256: 4aee09e48ecd30b2dcaa9de4eb8af2fcdf36ed040eac50c14f3345a12410b6ec  # [aarch64]
-  sha256: abc366280d0aa1ca047323a3e316270b80ffabb649021184647cd16b44c60a71  # [win]
+  sha256: 20ae775b1c78a107fca1cc52f2cba35f55e5296356fe0678937212f70923d77f  # [linux64]
+  sha256: 22e57945f33e4b995d63899993b7a0f07fb512fc8ecb5279d183da726b3550fe  # [ppc64le]
+  sha256: c8580a12241b20fc46bdf3acfce09d5395bf5dc665df2db4c2d5e9491326b8cb  # [aarch64]
+  sha256: 44a500778ecf60988525d1f1b8f32fa224b80d771057bdbe7488cc3c662d6d38  # [win]
 
 build:
   number: 0
@@ -59,4 +59,4 @@ about:
 
 extra:
   recipe-maintainers:
-    - adibbley
+    - conda-forge/cuda
