@@ -1,5 +1,5 @@
 {% set name = "cuda-nvml-dev" %}
-{% set version = "12.4.99" %}
+{% set version = "12.4.127" %}
 {% set cuda_version = "12.4" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
@@ -18,10 +18,10 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvml_dev/{{ platform }}/cuda_nvml_dev-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: fe4b7ffe5660dacca6d1d84cfa3200c0546df307450225c6bc3cd64d1b67402a  # [linux64]
-  sha256: 95ff7fe43fe1c9d1951e005555c65a693ba729ec5e9f677f6110eb14b72df72c  # [ppc64le]
-  sha256: 167bad08c50312900c099168764b3cf582018eed7db7b180dca85e1b240053d3  # [aarch64]
-  sha256: 37aa58532924573e5d9227be92fead96db73cd470af6ce809e3a2b6cd3ee7a82  # [win]
+  sha256: 15af54c7d909f6e24db8b557e34276d70778fcb26f1969b7a9fe42abaa919265  # [linux64]
+  sha256: e3e2c040a2edc8238bc72c0b600d1b7639b240223d5f3f1fb419162a4c1afb14  # [ppc64le]
+  sha256: 81820623c4ad794efbd00a38649af7847b951cd5fce2659d001a525e6f6bb72d  # [aarch64]
+  sha256: 8240b666b0da2aebc58c861410c70f4d5ffe157e7071586314ba0d79200f7519  # [win]
 
 build:
   number: 0
