@@ -1,0 +1,18 @@
+# The buildout of these CUDA packages is happening on a private channel for the moment,
+# while we wait for a redistribution license.
+# It also prevents uploading to our public staging channel.
+# The below can probably all be deleted next time the feedstock needs updating.
+
+channels:
+  - lc030263
+upload_channels:
+  - lc030263
+
+upload_to_staging_channel_in_pr: False
+
+#upload_without_merge: True
+
+# don't skip existing
+build_parameters:
+  - "--suppress-variables"
+  - "--error-overlinking"
