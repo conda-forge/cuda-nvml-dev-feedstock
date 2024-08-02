@@ -19,13 +19,12 @@ package:
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvml_dev/{{ platform }}/cuda_nvml_dev-{{ platform }}-{{ version }}-archive.{{ extension }}
   sha256: db21efb8e2f3d05196aef2b41378f96955312e539ffa3d0c4bc98baa04128376  # [linux64]
-  sha256: e3e2c040a2edc8238bc72c0b600d1b7639b240223d5f3f1fb419162a4c1afb14  # [ppc64le]
   sha256: 2ebfa603850fd1498189b67d4a00ca6e34aea25dd4d0c761c2bc8ceafa6db26f  # [aarch64]
   sha256: 700e17949a17db4bc7703f9140c56eb1eb9ec7ee79bba76b072ec17eacada5ef  # [win]
 
 build:
   number: 0
-  skip: true  # [osx]
+  skip: true  # [osx or ppc64le]
 
 requirements:
   build:
