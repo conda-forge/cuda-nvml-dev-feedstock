@@ -1,68 +1,87 @@
-{% set name = "cuda-nvml-dev" %}
-{% set version = "13.3.29" %}
-{% set cuda_version = "13.3" %}
-{% set platform = "linux-x86_64" %}  # [linux64]
-{% set platform = "linux-ppc64le" %}  # [ppc64le]
-{% set platform = "linux-sbsa" %}  # [aarch64]
-{% set platform = "windows-x86_64" %}  # [win]
-{% set target_name = "x86_64-linux" %}  # [linux64]
-{% set target_name = "ppc64le-linux" %}  # [ppc64le]
-{% set target_name = "sbsa-linux" %}  # [aarch64]
-{% set target_name = "x64" %}  # [win]
-{% set extension = "tar.xz" %}  # [not win]
-{% set extension = "zip" %}  # [win]
+schema_version: 1
+
+context:
+  version: "13.3.29"
+  cuda_version: "13.3"
 
 package:
-  name: {{ name|lower }}
-  version: {{ version }}
+  name: cuda-nvml-dev
+  version: ${{ version }}
 
 source:
-  url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvml_dev/{{ platform }}/cuda_nvml_dev-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: b62508923dadc0ac79fb1846eeb444296813cb077964e0c8348ba051bc0160aa  # [linux64]
-  sha256: 40d290c2fbabc3b559c8f5083a86adbb331a76e556914b2c46a0f0d11ca51494  # [aarch64]
-  sha256: 4e1bd1c66dd66293c6d94b1ed2efa5065654533b36ccbc7477dc1f466dc3d65c  # [win]
+  - if: linux64
+    then:
+      url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvml_dev/linux-x86_64/cuda_nvml_dev-linux-x86_64-${{ version }}-archive.tar.xz
+      sha256: b62508923dadc0ac79fb1846eeb444296813cb077964e0c8348ba051bc0160aa
+  - if: linux and aarch64
+    then:
+      url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvml_dev/linux-sbsa/cuda_nvml_dev-linux-sbsa-${{ version }}-archive.tar.xz
+      sha256: 40d290c2fbabc3b559c8f5083a86adbb331a76e556914b2c46a0f0d11ca51494
+  - if: win64
+    then:
+      url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvml_dev/windows-x86_64/cuda_nvml_dev-windows-x86_64-${{ version }}-archive.zip
+      sha256: 4e1bd1c66dd66293c6d94b1ed2efa5065654533b36ccbc7477dc1f466dc3d65c
 
 build:
   number: 1
-  binary_relocation: false
-  skip: true  # [osx or ppc64le]
+  skip: osx or ppc64le or riscv64
+  script: build
+  dynamic_linking:
+    binary_relocation: false
 
 requirements:
   build:
-    - {{ compiler("c") }}
-    - {{ compiler("cxx") }}
-    - {{ stdlib("c") }}
-    - arm-variant * {{ arm_variant_type }}  # [aarch64]
-    - cf-nvidia-tools 1  # [linux]
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib('c') }}
+    - if: aarch64
+      then: arm-variant * ${{ arm_variant_type }}
+    - if: linux
+      then: cf-nvidia-tools 1.*
   host:
-    - cuda-version {{ cuda_version }}
+    - cuda-version ${{ cuda_version }}.*
   run:
-    - {{ pin_compatible("cuda-version", max_pin="x.x") }}
-  run_constrained:
-    - arm-variant * {{ arm_variant_type }}  # [aarch64]
+    - ${{ pin_compatible('cuda-version', upper_bound='x.x') }}
+  run_constraints:
+    - if: aarch64
+      then: arm-variant * ${{ arm_variant_type }}
 
-test:
-  requires:
-    - patchelf  # [linux]
-  files:
-    - test-rpath.sh
-  commands:
-    - test -f $PREFIX/lib/pkgconfig/nvidia-ml-*.pc                         # [linux]
-    - test -f $PREFIX/targets/{{ target_name }}/lib/stubs/libnvidia-ml.so  # [linux]
-    - test -f $PREFIX/targets/{{ target_name }}/include/nvml.h             # [linux]
-    - bash test-rpath.sh                                                   # [linux]
-    - if not exist %LIBRARY_LIB%\{{ target_name }}\nvml.lib exit 1         # [win]
-    - if not exist %LIBRARY_INC%\nvml.h exit 1    # [win]
+tests:
+  - package_contents:
+      files:
+        - if: linux64
+          then:
+            - lib/pkgconfig/nvidia-ml-*.pc
+            - targets/x86_64-linux/lib/stubs/libnvidia-ml.so
+            - targets/x86_64-linux/include/nvml.h
+        - if: linux and aarch64
+          then:
+            - lib/pkgconfig/nvidia-ml-*.pc
+            - targets/sbsa-linux/lib/stubs/libnvidia-ml.so
+            - targets/sbsa-linux/include/nvml.h
+        - if: win
+          then: Library/lib/x64/nvml.lib
+      include:
+        - if: win
+          then: nvml.h
+  - if: linux
+    then:
+      requirements:
+        run:
+          - patchelf
+      files:
+        recipe:
+          - test-rpath.sh
+      script:
+        - bash test-rpath.sh
 
 about:
-  home: https://developer.nvidia.com/cuda-toolkit
-  license_file: LICENSE
+  homepage: https://developer.nvidia.com/cuda-toolkit
+  documentation: https://docs.nvidia.com/cuda/index.html
   license: LicenseRef-NVIDIA-End-User-License-Agreement
-  license_url: https://docs.nvidia.com/cuda/eula/index.html
-  summary: NVML native dev links, headers
-  description: |
-    NVML native dev links, headers
-  doc_url: https://docs.nvidia.com/cuda/index.html
+  license_file: LICENSE
+  summary: NVML native development links and headers
+  description: NVML native development links and headers.
 
 extra:
   recipe-maintainers:
