@@ -1,14 +1,16 @@
 {% set name = "cuda-nvml-dev" %}
-{% set version = "13.3.29" %}
-{% set cuda_version = "13.3" %}
+{% set version = "13.4.61" %}
+{% set cuda_version = "13.4" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
-{% set platform = "windows-x86_64" %}  # [win]
+{% set platform = "windows-x86_64" %}  # [win64]
+{% set platform = "windows-arm64" %}  # [win and arm64]
 {% set target_name = "x86_64-linux" %}  # [linux64]
 {% set target_name = "ppc64le-linux" %}  # [ppc64le]
 {% set target_name = "sbsa-linux" %}  # [aarch64]
-{% set target_name = "x64" %}  # [win]
+{% set target_name = "x64" %}  # [win64]
+{% set target_name = "arm64" %}  # [win and arm64]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
 
@@ -18,9 +20,10 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvml_dev/{{ platform }}/cuda_nvml_dev-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: b62508923dadc0ac79fb1846eeb444296813cb077964e0c8348ba051bc0160aa  # [linux64]
-  sha256: 40d290c2fbabc3b559c8f5083a86adbb331a76e556914b2c46a0f0d11ca51494  # [aarch64]
-  sha256: 4e1bd1c66dd66293c6d94b1ed2efa5065654533b36ccbc7477dc1f466dc3d65c  # [win]
+  sha256: 20cdc2af7ceefed099c287fe8654a9e9092aabe2ac7c443195aede62a23446a1  # [linux64]
+  sha256: 40ab275ff8a339614dc06f8b2b2649c4daec13815174e293fe116b3efcae8edc  # [aarch64]
+  sha256: d84097b7333b6190d2db1e971b7e2b7e6483f6adee82261d8b65e00e636932d0  # [win64]
+  sha256: 285e406201ccd48469a739334dba8af9ea601c3d89eda4156da43537727a0d72  # [win and arm64]
 
 build:
   number: 0
